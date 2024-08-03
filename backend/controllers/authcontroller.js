@@ -55,7 +55,7 @@ export const login = async (req, res) => {
     }
 };
 
-export const logout = async (req, res) => {
+export const logout = async (_, res) => {
     try {
         // Clear the JWT token from the client-side
         res.clearCookie('token');
