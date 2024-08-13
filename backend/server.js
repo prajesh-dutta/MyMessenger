@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import authRoutes from './routes/authroute.js';
+import authRoutes from './routes/authroute.js'; // Adjust the path as necessary
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -21,6 +21,7 @@ const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
