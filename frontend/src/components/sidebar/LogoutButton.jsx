@@ -5,13 +5,18 @@ const LogoutButton = () => {
 	const { loading, logout } = useLogout();
 
 	return (
-		<div className='mt-auto'>
-			{!loading ? (
-				<BiLogOut className='w-6 h-6 text-white cursor-pointer' onClick={logout} />
+		<button
+			onClick={logout}
+			disabled={loading}
+			className='p-3 hover:bg-red-500/20 rounded-full transition-colors duration-200 group'
+			title="Logout"
+		>
+			{loading ? (
+				<div className='animate-spin rounded-full h-5 w-5 border-b-2 border-red-400'></div>
 			) : (
-				<span className='loading loading-spinner'></span>
+				<BiLogOut className='w-5 h-5 text-gray-300 group-hover:text-red-400 transition-colors duration-200' />
 			)}
-		</div>
+		</button>
 	);
 };
 export default LogoutButton;

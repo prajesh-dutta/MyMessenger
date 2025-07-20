@@ -8,26 +8,34 @@ const MessageInput = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!message) return;
+		if (!message.trim()) return;
 		await sendMessage(message);
 		setMessage("");
 	};
 
 	return (
-		<form className='px-4 my-3' onSubmit={handleSubmit}>
-			<div className='w-full relative'>
+		<div className='p-6 border-t border-white/10'>
+			<form onSubmit={handleSubmit} className='relative'>
 				<input
 					type='text'
-					className='border text-sm rounded-lg block w-full p-2.5  bg-gray-700 border-gray-600 text-white'
-					placeholder='Send a message'
+					className='w-full pl-4 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300'
+					placeholder='Type your message...'
 					value={message}
 					onChange={(e) => setMessage(e.target.value)}
 				/>
-				<button type='submit' className='absolute inset-y-0 end-0 flex items-center pe-3'>
-					{loading ? <div className='loading loading-spinner'></div> : <BsSend />}
+				<button 
+					type='submit' 
+					disabled={loading || !message.trim()}
+					className='absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg transition-colors duration-200'
+				>
+					{loading ? (
+						<div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white'></div>
+					) : (
+						<BsSend className='w-4 h-4 text-white' />
+					)}
 				</button>
-			</div>
-		</form>
+			</form>
+		</div>
 	);
 };
 export default MessageInput;

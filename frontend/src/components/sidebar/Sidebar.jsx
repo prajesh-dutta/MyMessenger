@@ -9,16 +9,26 @@ const Sidebar = () => {
 	const [showSettings, setShowSettings] = useState(false);
 
 	return (
-		<div className='border-r border-slate-500 p-4 flex flex-col'>
-			<SearchInput />
-			<div className='divider px-3'></div>
-			<Conversations />
-			<div className='mt-auto flex justify-between items-center'>
+		<div className='w-80 bg-white/5 border-r border-white/10 flex flex-col'>
+			{/* Header */}
+			<div className='p-6 border-b border-white/10'>
+				<h2 className='text-2xl font-bold text-white mb-4'>Chats</h2>
+				<SearchInput />
+			</div>
+			
+			{/* Conversations */}
+			<div className='flex-1 overflow-y-auto'>
+				<Conversations />
+			</div>
+			
+			{/* Footer */}
+			<div className='p-4 border-t border-white/10 flex justify-between items-center'>
 				<button 
 					onClick={() => setShowSettings(true)}
-					className='p-2 hover:bg-gray-600 rounded-full'
+					className='p-3 hover:bg-white/10 rounded-full transition-colors duration-200 group'
+					title="Settings"
 				>
-					<IoSettings className='w-5 h-5 text-white' />
+					<IoSettings className='w-5 h-5 text-gray-300 group-hover:text-white transition-colors duration-200' />
 				</button>
 				<LogoutButton />
 			</div>

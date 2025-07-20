@@ -7,21 +7,45 @@ const Message = ({ message }) => {
 	const { selectedConversation } = useConversation();
 	const fromMe = message.senderId === (authUser.user?._id || authUser._id);
 	const formattedTime = extractTime(message.createdAt);
-	const chatClassName = fromMe ? "chat-end" : "chat-start";
 	const profilePic = fromMe ? (authUser.user?.profilepic || authUser.profilepic) : selectedConversation?.profilepic;
-	const bubbleBgColor = fromMe ? "bg-blue-500" : "";
 
 	const shakeClass = message.shouldShake ? "shake" : "";
 
 	return (
-		<div className={`chat ${chatClassName}`}>
-			<div className='chat-image avatar'>
-				<div className='w-10 rounded-full'>
-					<img alt='Tailwind CSS chat bubble component' src={profilePic} />
+		<div className={`flex mb-4 ${fromMe ? 'justify-end' : 'justify-start'}`}>
+			<div className={`flex max-w-[70%] ${fromMe ? 'flex-row-reverse' : 'flex-row'} items-end gap-2`}>
+				{/* Avatar */}
+				<div className='w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center flex-shrink-0'>
+					{profilePic ? (
+						<img 
+							src={profilePic} 
+							alt='profile' 
+							className='w-full h-full object-cover'
+						/>
+					) : (
+						<span className='text-white text-xs font-semibold'>
+							{fromMe 
+								? (authUser.user?.fullname || authUser.fullname)?.charAt(0).toUpperCase()
+								: selectedConversation?.fullname?.charAt(0).toUpperCase()
+							}
+						</span>
+					)}
+				</div>
+
+				{/* Message Bubble */}
+				<div className={`${shakeClass}`}>
+					<div className={`px-4 py-2 rounded-2xl shadow-lg ${
+						fromMe 
+							? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-sm' 
+							: 'bg-white/10 text-white rounded-bl-sm backdrop-blur-sm border border-white/20'
+					}`}>
+						<p className='text-sm leading-relaxed'>{message.message}</p>
+					</div>
+					<div className={`text-xs text-gray-400 mt-1 ${fromMe ? 'text-right' : 'text-left'}`}>
+						{formattedTime}
+					</div>
 				</div>
 			</div>
-			<div className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}>{message.message}</div>
-			<div className='chat-footer opacity-50 text-xs flex gap-1 items-center'>{formattedTime}</div>
 		</div>
 	);
 };
