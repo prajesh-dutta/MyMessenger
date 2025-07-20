@@ -10,6 +10,16 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    email: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
     password: {
         type: String,
         required: true,
@@ -24,8 +34,8 @@ const userSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-}, /*{
+}, {
     timestamps: true
-}*/);
+});
 const User = mongoose.model('User', userSchema);
 export default User;

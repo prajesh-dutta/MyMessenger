@@ -1,0 +1,2 @@
+// Placeholder for notification.mp3 - in a real app this would be an actual audio file
+export default "";
