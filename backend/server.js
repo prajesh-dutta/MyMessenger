@@ -2,12 +2,14 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 import authRoutes from './routes/authroute.js';
 import messageRoutes from './routes/messageroute.js';
 import userRoutes from './routes/userroute.js';
+import passport from './config/passport.js';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
@@ -33,6 +35,20 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+// Serve static files for uploaded images
+app.use('/uploads', express.static('uploads'));
+
+// Session middleware for passport
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-session-secret',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
@@ -41,15 +57,15 @@ app.use('/api/users', userRoutes);
 // Socket.io for real-time messaging
 const userSocketMap = {}; // {userId: socketId}
 
-const getReceiverSocketId = (receiverId) => {
-    return userSocketMap[receiverId];
-};
-
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
     const userId = socket.handshake.query.userId;
     if (userId != "undefined") userSocketMap[userId] = socket.id;
+
+    // Store references in app for controllers to access
+    app.set('io', io);
+    app.set('userSocketMap', userSocketMap);
 
     // io.emit() is used to send events to all the connected clients
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
@@ -85,4 +101,4 @@ function startServer() {
 
 startServer();
 
-export { app, io, server, getReceiverSocketId };
+export { app, io, server };

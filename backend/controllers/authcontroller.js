@@ -2,6 +2,7 @@
 import User from '../models/usermodel.js'; // Import the User model
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import passport from '../config/passport.js';
 
 export const register = async (req, res) => {
     try {
@@ -84,4 +85,31 @@ export const logout = async (_, res) => {
         console.error(error); // Log the error
         return res.status(500).json({ message: "Internal server error" });
     }
+};
+
+// Google OAuth
+export const googleAuth = passport.authenticate('google', {
+    scope: ['profile', 'email']
+});
+
+export const googleCallback = (req, res, next) => {
+    passport.authenticate('google', (err, user) => {
+        if (err) {
+            return res.redirect('http://localhost:5173/login?error=oauth_error');
+        }
+        if (!user) {
+            return res.redirect('http://localhost:5173/login?error=oauth_failed');
+        }
+        
+        // Generate JWT token
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'fallback_secret');
+        
+        // Redirect to frontend with token
+        res.redirect(`http://localhost:5173/auth/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
+            _id: user._id,
+            fullname: user.fullname,
+            username: user.username,
+            profilepic: user.profilepic
+        }))}`);
+    })(req, res, next);
 };

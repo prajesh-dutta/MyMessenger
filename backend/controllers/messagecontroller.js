@@ -1,7 +1,6 @@
 import Message from '../models/messagemodel.js';
 import Conversation from '../models/conversationmodel.js';
 import { encrypt, decrypt } from '../utils/encryption.js';
-import { getReceiverSocketId, io } from '../server.js';
 
 export const sendMessage = async (req, res) => {
     try {
@@ -35,10 +34,11 @@ export const sendMessage = async (req, res) => {
 
         await Promise.all([conversation.save(), newMessage.save()]);
 
-        // SOCKET IO FUNCTIONALITY WILL GO HERE
-        const receiverSocketId = getReceiverSocketId(receiverId);
+        // SOCKET IO FUNCTIONALITY - emit to specific user
+        const io = req.app.get('io');
+        const userSocketMap = req.app.get('userSocketMap') || {};
+        const receiverSocketId = userSocketMap[receiverId];
         if (receiverSocketId) {
-            // io.to(<socket_id>).emit() used to send events to specific client
             io.to(receiverSocketId).emit("newMessage", newMessage);
         }
 

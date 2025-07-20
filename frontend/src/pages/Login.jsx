@@ -56,6 +56,17 @@ const Login = () => {
 							{loading ? <span className='loading loading-spinner '></span> : "Login"}
 						</button>
 					</div>
+
+					<div className='divider'>OR</div>
+
+					<div>
+						<a 
+							href='/api/auth/google' 
+							className='btn btn-block btn-sm mt-2 bg-red-600 hover:bg-red-700 text-white border-none'
+						>
+							Continue with Google
+						</a>
+					</div>
 				</form>
 			</div>
 		</div>
