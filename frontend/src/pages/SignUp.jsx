@@ -142,24 +142,25 @@ const SignUp = () => {
 							)}
 						</button>
 
+						{/* Show Google OAuth only if explicitly desired - users can uncomment when configured */}
 						{/* Divider */}
-						<div className='relative my-6'>
+						{/* <div className='relative my-6'>
 							<div className='absolute inset-0 flex items-center'>
 								<div className='w-full border-t border-gray-600'></div>
 							</div>
 							<div className='relative flex justify-center text-sm'>
 								<span className='px-4 bg-transparent text-gray-400'>Or continue with</span>
 							</div>
-						</div>
+						</div> */}
 
 						{/* Google Button */}
-						<a 
+						{/* <a 
 							href='/api/auth/google' 
 							className='w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl border border-white/20 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300 transform hover:translate-y-[-2px] flex items-center justify-center gap-3 shadow-lg'
 						>
 							<FaGoogle className='text-lg' />
 							Continue with Google
-						</a>
+						</a> */}
 					</form>
 				</div>
 

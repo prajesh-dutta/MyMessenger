@@ -21,6 +21,10 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const PORT = process.env.PORT || 8000;
+const mongoURI = process.env.MONGO_URI;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
@@ -29,10 +33,6 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 });
-
-const PORT = process.env.PORT || 8000;
-const mongoURI = process.env.MONGO_URI;
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 // Middleware
 app.use(cors({
@@ -99,8 +99,6 @@ io.on('connection', (socket) => {
 const ConnectToMongoDB = async () => {
     try {
         await mongoose.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
             serverSelectionTimeoutMS: 30000,
         });
         console.log('MongoDB connected');

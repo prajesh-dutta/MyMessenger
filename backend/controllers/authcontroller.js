@@ -88,24 +88,38 @@ export const logout = async (_, res) => {
 };
 
 // Google OAuth
-export const googleAuth = passport.authenticate('google', {
-    scope: ['profile', 'email']
-});
+export const googleAuth = (req, res, next) => {
+    // Check if Google OAuth is configured
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        return res.status(501).json({ 
+            message: "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env file." 
+        });
+    }
+    
+    passport.authenticate('google', {
+        scope: ['profile', 'email']
+    })(req, res, next);
+};
 
 export const googleCallback = (req, res, next) => {
+    // Check if Google OAuth is configured
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=oauth_not_configured`);
+    }
+    
     passport.authenticate('google', (err, user) => {
         if (err) {
-            return res.redirect('http://localhost:5173/login?error=oauth_error');
+            return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=oauth_error`);
         }
         if (!user) {
-            return res.redirect('http://localhost:5173/login?error=oauth_failed');
+            return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=oauth_failed`);
         }
         
         // Generate JWT token
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'fallback_secret');
         
         // Redirect to frontend with token
-        res.redirect(`http://localhost:5173/auth/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
+        res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
             _id: user._id,
             fullname: user.fullname,
             username: user.username,
