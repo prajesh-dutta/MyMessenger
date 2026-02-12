@@ -27,7 +27,7 @@ Before you begin, make sure you have the following installed:
 
 Verify installation:
 ```bash
-node --version  # Should be v14 or higher
+node --version  # Should be v16 or higher (v18 LTS recommended)
 npm --version
 ```
 

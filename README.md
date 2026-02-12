@@ -47,7 +47,7 @@ A modern, secure chat application built with React, Node.js, Socket.io, and Mong
 ## 📦 Installation
 
 ### Prerequisites
-- Node.js (v14 or higher) - [Download Node.js](https://nodejs.org/)
+- Node.js (v16 or higher, v18 LTS recommended) - [Download Node.js](https://nodejs.org/)
 - MongoDB (local or Atlas) - [Download MongoDB](https://www.mongodb.com/try/download/community)
 - Git - [Download Git](https://git-scm.com/)
 - Google OAuth credentials (optional) - [Get credentials](https://console.cloud.google.com/)
@@ -441,7 +441,7 @@ This project is licensed under the ISC License.
 
 ## 📞 Support
 
-For support, email prajesh.dutta@example.com or open an issue on GitHub.
+For support, open an issue on [GitHub](https://github.com/prajesh-dutta/MyMessenger/issues).
 
 ---
 
