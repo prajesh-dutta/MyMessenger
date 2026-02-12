@@ -7,6 +7,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import rateLimit from 'express-rate-limit';
 
 import authRoutes from './routes/authroute.js';
 import messageRoutes from './routes/messageroute.js';
@@ -41,6 +42,18 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+
+// Rate limiting for auth routes (production security)
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Apply rate limiting to auth routes
+app.use('/api/auth', authLimiter);
 
 // Serve static files for uploaded images
 app.use('/uploads', express.static('uploads'));
